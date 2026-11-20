@@ -1,5 +1,6 @@
 
 import { useEffect, useRef, useState } from 'react';
+import { QRCodeSVG } from 'qrcode.react';
 import { supabase } from './supabase';
 import './App.css';
 
@@ -66,6 +67,52 @@ function FilePreview({ file }) {
       <span>🎬</span>
       <small>VIDÉO</small>
     </div>
+  );
+}
+
+
+function QRPage() {
+  function openFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen?.().catch(() => {});
+    } else {
+      document.exitFullscreen?.();
+    }
+  }
+
+  return (
+    <main className="qr-page">
+      <div className="qr-decor qr-decor-top" aria-hidden="true">🌾 🌻 🌾</div>
+      <section className="qr-card">
+        <div className="qr-edition">🚜 ÉDITION SPÉCIALE • GRANDE MOISSON 🚜</div>
+        <div className="qr-tractor" aria-hidden="true">🚜</div>
+        <p className="qr-eyebrow">LORENZO FÊTE SES</p>
+        <h1>18 ANS !</h1>
+        <div className="qr-divider"><span>🌻</span></div>
+        <h2>Scanne et partage tes souvenirs !</h2>
+        <p className="qr-description">Photos, vidéos, petits mots et dédicaces :
+          <strong> participe à la récolte des souvenirs de Lorenzo !</strong>
+        </p>
+        <div className="qr-code-frame">
+          <QRCodeSVG
+            value="https://lorenzo-18-ans.vercel.app/"
+            size={340}
+            level="H"
+            includeMargin
+            bgColor="#ffffff"
+            fgColor="#24442d"
+          />
+        </div>
+        <p className="qr-instruction">📱 Ouvre l'appareil photo de ton téléphone et vise le QR code</p>
+        <div className="qr-url">lorenzo-18-ans.vercel.app</div>
+        <div className="qr-bottom-decoration" aria-hidden="true">🌾 🌻 🚜 🌻 🌾</div>
+      </section>
+      <div className="qr-controls">
+        <button type="button" onClick={openFullscreen}>⛶ Afficher en plein écran</button>
+        <a href="/">← Retour au site</a>
+      </div>
+      <div className="qr-decor qr-decor-bottom" aria-hidden="true">🌻 🌾 🌻</div>
+    </main>
   );
 }
 
@@ -589,6 +636,10 @@ function App() {
     return bytes < 1024 * 1024
       ? `${(bytes / 1024).toFixed(0)} Ko`
       : `${(bytes / (1024 * 1024)).toFixed(1)} Mo`;
+  }
+
+  if (window.location.pathname.replace(/\/+$/, '') === '/qr') {
+    return <QRPage />;
   }
 
   return (
